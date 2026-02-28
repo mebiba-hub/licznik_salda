@@ -3,7 +3,6 @@
 
 print("Witaj w apce do kontrolowania budrzetu")
 
-imiona = ["w", "d"]
 przychody = []
 wydatki = []
 
@@ -34,15 +33,28 @@ def liczenie_salda_minus():
         suma_wydatkow += x["ile"]
     return suma_wydatkow
 
+def podsumowanie_miesiaca(miesiac, rok):
+    przychody_w_miesiacu = []
+    for x in przychody:
+        if x[int(miesiac)] == "miesiac" and x[int(rok)] == "rok":
+            przychody_w_miesiacu.append(x)
+        else:
+            continue
+    return przychody_w_miesiacu
+
 def dodawanie_przychodow():
     with open("plusy.txt", "r") as file:
         for line in file:
             line = line.strip()
             ilosc, kategoria, data = line.split(",")
+            dzien, miesiac, rok = data.split(".")
             przychody.append({
                 "ile": float(ilosc),
                 "kategoria": kategoria,
-                "data": data
+                "data": data,
+                "dzien": int(dzien),
+                "miesiac": int(miesiac),
+                "rok": int(rok)
             })
 
 def dodawanie_wydatkow():
@@ -50,10 +62,14 @@ def dodawanie_wydatkow():
         for line in file:
             line = line.strip()
             ilosc, kategoria, data = line.split(",")
+            dzien, miesiac, rok = data.split(".")
             wydatki.append({
                 "ile": float(ilosc),
                 "kategoria": kategoria,
-                "data": data
+                "data": data,
+                "dzien": int(dzien),
+                "miesiac": int(miesiac),
+                "rok": int(rok)
             })
 
 while True:
@@ -67,11 +83,11 @@ while True:
         wybor = input("Co chcesz zrobić (wpisz 1, 2 lub 3):    ")
 
         if wybor == "1":
-            dodawanie_pieniedzy(input("Ile",), input("kategoria",), input("data"))
+            dodawanie_pieniedzy(input("Ile: ",), input("kategoria: ",), input("data: "))
             dodawanie_przychodow()
             break
         elif wybor == "2":
-            odejmowanie_pieniedzy(input("Ile",), input("kategoria",), input("data"))
+            odejmowanie_pieniedzy(input("Ile: ",), input("kategoria: ",), input("data: "))
             dodawanie_wydatkow()
             break
         elif wybor == "3":
@@ -83,7 +99,16 @@ while True:
 
                 wybor = input("Co chcesz zrobić (wpisz 1 lub 2):    ")
 
-                if wybor == "1":#Jeszcze nie ma
+                if wybor == "1":
+                    print("Podsumowanie którego miesiąca chcesz zobaczyć?")
+
+                    ktory_miesiac = input("Wpisz miesiąc(01,02...):    ")
+                    ktory_rok = input("Wpisz rok(2026,2027...):    ")
+
+                    aktualne_pods = podsumowanie_miesiaca(ktory_miesiac, ktory_rok)
+
+                    print(aktualne_pods)
+
                     break
                 elif wybor == "2":
                     # liczenie salda
